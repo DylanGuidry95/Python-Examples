@@ -1,17 +1,18 @@
 from Node import Node
+from Node import NodeVisual
 
 class Grid(object):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.nodes = []
+        self.nodes = {}
         self.GenGrid()
 
     def GenGrid(self):
         for i in range(0, self.width + 1):
             for j in range(0, self.height):
                 node = Node(i, j, " ")
-                self.nodes.append(node)
+                self.nodes[node] = NodeVisual(i, j)
 
     def PrintGrid(self):
         row = ""
@@ -20,8 +21,6 @@ class Grid(object):
             if i % self.width == 0:
                 print row, "\n"
                 row = ""
-            x = str(node.xPos)
-            y = str(node.yPos)
             row += "[" + node.value + "]"
             i += 1
 
@@ -38,16 +37,13 @@ class Grid(object):
         adj = [left, top, right, bottom, topLeft,
                topRight, bottomRight, bottomLeft]
 
+        neighbors = []       
+
         if node in self.nodes:
             for n in self.nodes:
                 for a in adj:
                     if n.Compare(a):
-                        node.neighbors.append(n)
+                        neighbors.append(n)
 
-        print "Current: [", node.xPos, ",", node.yPos, "]"
-        for n in node.neighbors:
-            print "[", n.xPos, ",", n.yPos, "]"
-
-    def DrawGrid(self):
-        for node in self.nodes:
-            pygame.draw.rect(screen, (255,255,255), ((20) * node.xPos + 10,(20) * node.yPos + 10, 10,10))
+        return neighbors
+    

@@ -1,16 +1,11 @@
-import pygame
 import sys
-from Astar import Astar
-
+from AStar import *
+import pygame
+from Grid import Grid
 
 pygame.init()
-size = width, height = 1600, 900
-screen = pygame.display.set_mode(size)
-
-
 
 grid = Grid(10, 10)
-grid.DrawGrid()
 
 while 1:
     for event in pygame.event.get():
