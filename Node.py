@@ -22,7 +22,7 @@ class Node(object):
         self.xPos = xPos
         self.yPos = yPos
         self.value = value
-        self.parent = self
+        self.parent = None
         self.FScore = 0
         self.GScore = 0
         self.HScore = 0
@@ -31,10 +31,19 @@ class Node(object):
             return self.GScore + self.HScore
 
     def SetGScore(self):
-        if self.parent.xPos == self.xPos or self.parent.yPos == self.yPos:
-            self.GScore = 10
+        if self.parent is None:
+            if self.parent.xPos == self.xPos or self.parent.yPos == self.yPos:
+                self.GScore = 10
+            else:
+                self.GScore = 14
         else:
-            self.GScore = 14
+            tempG = 0
+            if self.parent.xPos == self.xPos or self.parent.yPos == self.yPos:
+                tempG = 10
+            else:
+                tempG = 14
+            if tempG < self.GScore:
+                GScore = tempG
 
     def SetHScore(self, goal):
         self.HScore = int(10 * (abs(goal.xPos - self.xPos) + abs(goal.yPos - self.yPos)))

@@ -3,25 +3,36 @@ from Grid import Grid
 class AStar(object):
     def __init__(self, grid, start, goal):
         self.grid = grid
-        self.open = []
-        self.close = []
         self.start = start
         self.goal = goal
         self.current = start
         self.current.SetHScore(self.goal)
+        self.open = [self.start]
+        self.close = []
 
     def Step(self):
-        self.open = self.grid.GetNeighbor(self.current)
+        if self.goal in self.close:
+            return
+        self.grid.nodes[self.start].DrawNode((0, 255, 0))
+        self.grid.nodes[self.goal].DrawNode((0, 0, 255))
+        self.SortOpenList()
+        for child in self.grid.GetNeighbor(self.current):            
+                if child in self.close:
+                    continue
+                else:
+                    self.open.append(child)            
+        
         if self.current in self.open:
             self.open.remove(self.current)
             self.close.append(self.current)
-        for node in self.grid.nodes:
+        for node in self.open:
+            self.grid.nodes[self.current].DrawNode((255, 255, 0))    
             node.parent = self.current
             node.SetGScore()
             node.SetHScore(self.goal)
             node.SetFScore()  
-        self.SortOpenList()
-        self.current = self.open[0]        
+        self.current = self.open[0]
+        self.grid.nodes[self.current].DrawNode((255, 0, 0))
 
 
     def SortOpenList(self):
