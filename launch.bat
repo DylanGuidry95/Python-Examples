@@ -1,3 +1,3 @@
 @ECHO off
-c:\python27\python.exe test.py
+e:\python27\python.exe main.py
 pause
