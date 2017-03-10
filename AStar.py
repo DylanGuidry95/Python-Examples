@@ -19,7 +19,10 @@ class AStar(object):
             node.parent = self.current
             node.SetGScore()
             node.SetHScore(self.goal)
-            node.SetFScore()            
+            node.SetFScore()  
+        self.SortOpenList()
+        self.current = self.open[0]        
+
 
     def SortOpenList(self):
         for node in self.grid.nodes:

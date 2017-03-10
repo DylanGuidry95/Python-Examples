@@ -22,7 +22,7 @@ class Node(object):
         self.xPos = xPos
         self.yPos = yPos
         self.value = value
-        self.parent = Node(0, 0, 1)
+        self.parent = self
         self.FScore = 0
         self.GScore = 0
         self.HScore = 0
