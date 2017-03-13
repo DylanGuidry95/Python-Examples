@@ -47,4 +47,3 @@ class AStar(object):
                     tempNode = node
                     node = nodeCheck
                     nodeCheck = tempNode
-        
