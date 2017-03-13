@@ -16,21 +16,26 @@ class AStar(object):
         self.grid.nodes[self.start].DrawNode((0, 255, 0))
         self.grid.nodes[self.goal].DrawNode((0, 0, 255))
         self.SortOpenList()
-        for child in self.grid.GetNeighbor(self.current):            
-                if child in self.close:
-                    continue
-                else:
-                    self.open.append(child)            
-        
+        for node in self.grid.GetNeighbor(self.current):
+            node.SetGScore(self.current)
+    
+        for child in self.current.children:
+            if child in self.close:
+                continue
+            else:
+                self.open.append(child)
+
         if self.current in self.open:
             self.open.remove(self.current)
             self.close.append(self.current)
+
         for node in self.open:
-            self.grid.nodes[self.current].DrawNode((255, 255, 0))    
-            node.parent = self.current
-            node.SetGScore()
+            self.grid.nodes[self.current].DrawNode((255, 255, 0))
+            node.SetGScore(self.current)
             node.SetHScore(self.goal)
-            node.SetFScore()  
+            node.SetFScore()
+        if self.open.count == 0:
+            return
         self.current = self.open[0]
         self.grid.nodes[self.current].DrawNode((255, 0, 0))
 

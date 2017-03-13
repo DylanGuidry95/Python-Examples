@@ -13,6 +13,7 @@ class NodeVisual(object):
         self.left = (self.margin + 10) * xPos + self.margin
         self.xPos = xPos
         self.yPos = yPos
+        self.parent = None
 
     def DrawNode(self, color):
         pygame.draw.rect(screen, color, (self.left, self.top, self.width, self.height))
@@ -26,16 +27,19 @@ class Node(object):
         self.FScore = 0
         self.GScore = 0
         self.HScore = 0
+        self.children = []
 
     def SetFScore(self):
             return self.GScore + self.HScore
 
-    def SetGScore(self):
+    def SetGScore(self, current):
         if self.parent is None:
+            self.parent = current
             if self.parent.xPos == self.xPos or self.parent.yPos == self.yPos:
                 self.GScore = 10
             else:
                 self.GScore = 14
+            self.parent.children.append(self)
         else:
             tempG = 0
             if self.parent.xPos == self.xPos or self.parent.yPos == self.yPos:
@@ -44,6 +48,7 @@ class Node(object):
                 tempG = 14
             if tempG < self.GScore:
                 GScore = tempG
+                self.parent.children.append(self)
 
     def SetHScore(self, goal):
         self.HScore = int(10 * (abs(goal.xPos - self.xPos) + abs(goal.yPos - self.yPos)))
