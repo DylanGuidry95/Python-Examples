@@ -37,14 +37,16 @@ class Shape(object):
 
 class Rectangle(Shape):
     '''Class used to draw a rectangle object to the screen'''
-    def __init__(self, screen, position, color, scale):
+    def __init__(self, screen, position, color, scale, margin):
         Shape.__init__(self, screen, position, color)
         self.scale = scale
+        self.margin = margin
 
     def draw(self):
         '''Draws a rectangle to the screen based on the value set in the constructor'''
         pygame.draw.rect(self.screen, self.color,
-                         (self.position[0], self.position[1], self.scale[0], self.scale[1]))
+                         (self.position[0] * self.margin, self.position[1] * self.margin,
+                          self.scale[0], self.scale[1]))
 
 class Circle(Shape):
     '''Class used to draw a circle object to the screen'''
