@@ -21,19 +21,15 @@ while 1:
 
     grid.drawgraph()
 
+    
     for node in grid.nodes:
         if pygame.mouse.get_pressed()[0]:
-            p = pygame.mouse.get_pos()
-            mousepos = (p[0], p[1])
-            distance = math.sqrt((mousepos[0] - node.position[0]) +
-                        (mousepos[1] - node.position[1]))
-            if distance < 1:
-                node.clicked()
+            x, y = pygame.mouse.get_pos()
+            if x > node.position[0] and x < node.position[0] + 25:
+                if y > node.position[1] and y < node.position[1] + 25:
+                    node.clicked()
+                    print x, y
 
-    p = pygame.mouse.get_pos()
-    mouse = Text(screen, [500, 775], [WHITE,BLACK], 
-    str(p[0]) + "," + str(p[1]) , 25)
-    mouse.draw()
 
     pygame.display.flip()
     pygame.display.flip()
