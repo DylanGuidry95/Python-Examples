@@ -29,6 +29,7 @@ class Shape(object):
     def __init__(self, screen, position, color):
         self.screen = screen
         self.position = position
+        self.drawposition = position
         self.color = color
 
     def changecolor(self, color):
@@ -44,8 +45,9 @@ class Rectangle(Shape):
 
     def draw(self):
         '''Draws a rectangle to the screen based on the value set in the constructor'''
+        self.drawposition = [self.position[0] * self.margin, self.position[1] * self.margin]
         pygame.draw.rect(self.screen, self.color,
-                         (self.position[0] * self.margin, self.position[1] * self.margin,
+                         (self.drawposition[0], self.drawposition[1],
                           self.scale[0], self.scale[1]))
 
 class Circle(Shape):

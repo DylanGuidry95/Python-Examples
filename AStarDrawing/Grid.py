@@ -42,8 +42,8 @@ class NodeInformation(object):
         gposition = self.position
         hposition = [self.position[0], self.position[1] + 50]
         fposition = [self.position[0], self.position[1] + 100]
-        g = Text(screen, gposition, [WHITE, BLACK], "G Score: " + str(node.gscore), 25)
-        h = Text(screen, hposition, [WHITE, BLACK], "H Score:" + str(node.hscore), 25)
+        g = Text(screen, gposition, [WHITE, BLACK], "G Score: " + str(node.position[0]), 25)
+        h = Text(screen, hposition, [WHITE, BLACK], "H Score:" + str(node.position[1]), 25)
         f = Text(screen, fposition, [WHITE, BLACK], "F Score:" + str(node.fscore), 25)
         g.draw()
         h.draw()

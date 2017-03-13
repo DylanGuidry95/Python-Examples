@@ -23,12 +23,12 @@ while 1:
 
     
     for node in grid.nodes:
-        if pygame.mouse.get_pressed()[0]:
+        if pygame.mouse.get_pressed()[1]:
             x, y = pygame.mouse.get_pos()
-            if x > node.position[0] and x < node.position[0] + 25:
-                if y > node.position[1] and y < node.position[1] + 25:
+            if x > node.nodevisual.drawposition[0] and x < node.nodevisual.drawposition[0] + 25:
+                if y > node.nodevisual.drawposition[1] and y < node.nodevisual.drawposition[1] + 25:
                     node.clicked()
-                    print x, y
+                    info.drawinformation(node)
 
 
     pygame.display.flip()
