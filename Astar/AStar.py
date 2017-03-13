@@ -13,12 +13,14 @@ class AStar(object):
     def Step(self):
         if self.goal in self.close:
             return
-        self.grid.nodes[self.start].DrawNode((0, 255, 0))
-        self.grid.nodes[self.goal].DrawNode((0, 0, 255))
-        self.SortOpenList()
+        if self.open.count == 0:
+            return
+
+        self.current = self.open[0]
+
         for node in self.grid.GetNeighbor(self.current):
             node.SetGScore(self.current)
-    
+
         for child in self.current.children:
             if child in self.close:
                 continue
@@ -29,16 +31,17 @@ class AStar(object):
             self.open.remove(self.current)
             self.close.append(self.current)
 
+        self.SortOpenList()
+
         for node in self.open:
             self.grid.nodes[self.current].DrawNode((255, 255, 0))
             node.SetGScore(self.current)
             node.SetHScore(self.goal)
             node.SetFScore()
-        if self.open.count == 0:
-            return
-        self.current = self.open[0]
-        self.grid.nodes[self.current].DrawNode((255, 0, 0))
 
+        self.grid.nodes[self.current].DrawNode((255, 0, 0))
+        self.grid.nodes[self.start].DrawNode((0, 255, 0))
+        self.grid.nodes[self.goal].DrawNode((0, 0, 255))
 
     def SortOpenList(self):
         for node in self.grid.nodes:
