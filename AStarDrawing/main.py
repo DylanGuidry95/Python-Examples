@@ -21,12 +21,13 @@ while 1:
 
     grid.drawgraph()
 
-    
+    grid.nodes[0].drawconnection(grid.nodes[26])
+
     for node in grid.nodes:
         if pygame.mouse.get_pressed()[1]:
             x, y = pygame.mouse.get_pos()
-            if x > node.nodevisual.drawposition[0] and x < node.nodevisual.drawposition[0] + 25:
-                if y > node.nodevisual.drawposition[1] and y < node.nodevisual.drawposition[1] + 25:
+            if x > node.nodevisual.visual.drawposition[0] and x < node.nodevisual.visual.drawposition[0] + 25:
+                if y > node.nodevisual.visual.drawposition[1] and y < node.nodevisual.visual.drawposition[1] + 25:
                     node.clicked()
                     info.drawinformation(node)
 
