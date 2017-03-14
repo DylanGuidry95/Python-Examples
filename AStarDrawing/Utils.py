@@ -99,6 +99,7 @@ class Arc(Shape):
                         self.angles[0], self.angles[1], self.thickness)
 
 class Text(Shape):
+    '''Used to create text objects in screen space'''
     def __init__(self, screen, position, color, text, size):
         Shape.__init__(self, screen, position, color)
         self.text = text

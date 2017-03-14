@@ -1,34 +1,37 @@
-''''''
-from Utils import *
-from Grid import *
+
+'''main'''
 import sys
-import math
+import pygame
+from Grid import AStar
+from Grid import Graph
+from Node import NodeInformation
+
 
 pygame.init()
 
-grid = Graph(53, 25)
+GRID = Graph(53, 25)
 
-algorithm = AStar(grid)
+ALGORITHM = AStar(GRID)
 
-grid.setupgraph()
+GRID.setupgraph()
 
-info = NodeInformation([0, 750])
-info.drawinformation(grid.nodes[0])
+INFO = NodeInformation([0, 750])
 
 pygame.event.get()
 
 
-while 1:    
+while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
-    grid.drawgraph()
+    GRID.drawgraph()
 
-    algorithm.enviormentupdate()
-    algorithm.algorithmstep()
+    ALGORITHM.enviormentupdate()
+    ALGORITHM.algorithmstep()
 
-    grid.nodes[20].drawconnection(grid.nodes[21])
+    if ALGORITHM.current != None:
+        INFO.drawinformation(ALGORITHM.current)
 
     pygame.display.flip()
     pygame.display.flip()
