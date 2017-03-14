@@ -118,7 +118,7 @@ class NodeObject(object):
             circle = Circle(screen, [self.drawposition()[0] + (25/2),
                                      self.drawposition()[1] + (25/2)],
                             BLACK, 10)
-            line = Line(screen, [[self.position[0] + (25/2), self.position[1] + (25/2)],
+            line = Line(screen, [[self.drawposition()[0] + (25/2), self.drawposition()[1] + (25/2)],
                                  [node.visual.drawposition()[0] + (25/2),
                                   node.visual.drawposition()[1] + (25/2)]], BLACK, 2)
             circle.draw()
