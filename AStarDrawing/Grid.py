@@ -45,6 +45,9 @@ class Node(object):
         self.gscore = 0
         self.hscore = 0
         self.fscore = 0
+        self.isWall = False
+        self.isGoal = False
+        self.isStart = False
 
     def drawvisual(self):
         self.nodevisual.drawNode()
@@ -53,8 +56,26 @@ class Node(object):
         self.nodevisual.drawtonode(node)
     
 
-    def clicked(self):
-        self.nodevisual.changecolor(RED)
+    def clicked(self, state):
+        if state == "start":
+            self.isStart = not self.isStart
+            if self.isStart:
+                self.nodevisual.changecolor(GREEN)
+            else:
+                self.nodevisual.changecolor(WHITE)
+        elif state == "goal":
+            self.isGoal = not self.isGoal
+            if self.isGoal:
+                self.nodevisual.changecolor(BLUE)
+            else:
+                self.nodevisual.changecolor(WHITE)
+            
+        elif state == "wall":
+            self.isWall = not self.isWall
+            if self.isWall:
+                self.nodevisual.changecolor(RED)
+            else:
+                self.nodevisual.changecolor(WHITE)
 
 
 class NodeInformation(object):
