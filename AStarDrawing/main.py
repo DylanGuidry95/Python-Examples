@@ -23,13 +23,12 @@ while 1:
         if event.type == pygame.QUIT:
             sys.exit()
 
-
-
     grid.drawgraph()
 
-    algorithm.update()
+    algorithm.enviormentupdate()
+    algorithm.algorithmstep()
 
-
+    grid.nodes[20].drawconnection(grid.nodes[21])
 
     pygame.display.flip()
     pygame.display.flip()

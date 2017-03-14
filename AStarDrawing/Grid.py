@@ -3,23 +3,13 @@ from Utils import*
 size = width, height = 1600, 900
 screen = pygame.display.set_mode(size)
 
-middleclick = False
-rightclick = False
-leftclick = False
 
-mtimer = 0
-rtimer = 0
-ltimer = 0
-
-deltatime = 0.0
-lastTick = 0.0
 
 class Graph(object):
     def __init__(self, width, height):
         self.width = width
         self.height = height
         self.nodes = []
-        lastTick = 0.0
 
     def setupgraph(self):
         for x in range(0, self.width):
@@ -35,46 +25,82 @@ class AStar(object):
         self.graph = graph
         self.start = None
         self.goal = None
+        self.open = []
+        self.close = []
+        self.current = None
+
+        self.middleclick = False
+        self.rightclick = False
+        self.leftclick = False
+        self.mtimer = 0.0
+        self.rtimer = 0.0
+        self.ltimer = 0.0
+        self.wasbuttonclicked = [False, False, False]
+        self.timers = [0.0, 0.0, 0.0]
+        self.deltatime = 0.0
+        self.lastTick = 0.0
 
     def setstartnode(self, node):
         if node in self.graph.nodes:
-            if self.start == None:
-                self.start = node
-            else:
-                self.start.changestate("start")
-                self.start = node
-                self.start.changestate("start")
+            self.start = node
+            self.start.changestate("start")
+            self.current = self.start
+            self.open.append(self.start)
 
     def setgoalnode(self, node):
         if node in self.graph.nodes:
-            if self.start == None:
-                self.start = node
-            else:
-                self.start.changestate("goal")
-                self.start = node
-                self.start.changestate("goal")
+            self.goal = node
+            self.goal.changestate("goal")
 
     def modifywall(self, node):
         if node in self.graph.nodes:
             node.changestate("wall")
 
-    def update(self):               
+    def checknodes(self):
+        for graphnode in self.graph.nodes:
+            if graphnode.isStart and graphnode != self.start:
+                graphnode.changestate("default")
+            if graphnode.isGoal and graphnode != self.goal:
+                graphnode.changestate("default")
+
+    def enviormentupdate(self):
         timer = pygame.time.get_ticks()
-        deltatime = (timer - lastTick)
-        lastTick = timer 
+        self.deltatime = (timer - self.lastTick)
+        self.lastTick = timer
 
         for node in self.graph.nodes:
             mxpos, mypos = pygame.mouse.get_pos()
-            if pygame.mouse.get_pressed()[1] and not middleclick:
-                middleclick = True
-                if node.visual.collisioncheck([mxpos, mypos]):
-                    self.modifywall(node)        
-        if middleclick == True:
-            mtimer = mtimer + (deltatime)
-        if mtimer > 400:
-            mtimer = 0
-            middleclick = False
+            if node.visual.collisioncheck([mxpos, mypos]):
+                if pygame.mouse.get_pressed()[0]:
+                    if not self.wasbuttonclicked[0]:
+                        self.setstartnode(node)
+                        self.wasbuttonclicked[0] = True
+                if pygame.mouse.get_pressed()[1]:
+                    if not self.wasbuttonclicked[1]:
+                        self.modifywall(node)
+                        self.wasbuttonclicked[1] = True
+                if pygame.mouse.get_pressed()[2]:
+                    if not self.wasbuttonclicked[2]:
+                        self.setgoalnode(node)
+                        self.wasbuttonclicked[2] = True
 
+        for iterator in range(0, 3):
+            if self.wasbuttonclicked[iterator]:
+                self.timers[iterator] = self.timers[iterator] + self.deltatime
+                if self.timers[iterator] > 400:
+                    self.timers[iterator] = 0
+                    self.wasbuttonclicked[iterator] = False
+
+        self.checknodes()
+
+    def algorithmstep(self):
+        if self.current != None:
+            for neighbor in self.current.getneighbors(self.graph):
+                if neighbor not in self.open:
+                    self.open.append(neighbor)
+            for opennode in self.open:
+                opennode.calcgscore(self.current)
+        
 
 class NodeObject(object):
     def __init__(self, position, color):
@@ -88,13 +114,15 @@ class NodeObject(object):
         self.visual.changecolor(color)
 
     def drawtonode(self, node):
-        circle = Circle(screen, [self.position[0] + (25/2), self.position[1] + (25/2)],
-                        BLACK, 10)
-        line = Line(screen, [[self.position[0] + (25/2), self.position[1] + (25/2)],
-                             [node.nodevisual.visual.drawposition[0] + (25/2),
-                              node.nodevisual.visual.drawposition[1] + (25/2)]], BLACK, 2)
-        circle.draw()
-        line.draw()
+        if node != None:
+            circle = Circle(screen, [self.drawposition()[0] + (25/2),
+                                     self.drawposition()[1] + (25/2)],
+                            BLACK, 10)
+            line = Line(screen, [[self.position[0] + (25/2), self.position[1] + (25/2)],
+                                 [node.visual.drawposition()[0] + (25/2),
+                                  node.visual.drawposition()[1] + (25/2)]], BLACK, 2)
+            circle.draw()
+            line.draw()
 
     def drawposition(self):
         return self.visual.drawposition
@@ -110,6 +138,7 @@ class Node(object):
     def __init__(self, position):
         self.position = position
         self.visual = NodeObject(self.position, WHITE)
+        self.parent = None
         self.gscore = 0
         self.hscore = 0
         self.fscore = 0
@@ -124,24 +153,66 @@ class Node(object):
         self.visual.drawtonode(node)
 
     def changestate(self, state):
-        if state == "start":
+        if state == "start" and not self.isGoal:
             self.isStart = not self.isStart
             if self.isStart:
                 self.visual.changecolor(GREEN)
             else:
-                self.visual.changecolor(WHITE)
-        elif state == "goal":
+                state = "default"
+        elif state == "goal"and not self.isStart:
             self.isGoal = not self.isGoal
             if self.isGoal:
                 self.visual.changecolor(BLUE)
             else:
-                self.visual.changecolor(WHITE)
-        elif state == "wall":
+                state = "default"
+        elif state == "wall"and not self.isGoal and not self.isStart:
             self.isWall = not self.isWall
             if self.isWall:
                 self.visual.changecolor(RED)
             else:
-                self.visual.changecolor(WHITE)
+                state = "default"
+        if state == "default":
+            self.isWall = False
+            self.isStart = False
+            self.isGoal = False
+            self.visual.changecolor(WHITE)
+
+    def getneighbors(self, graph):
+        neighbors = []
+
+        left = [self.position[0] - 1, self.position[1]]
+        topleft = [self.position[0] - 1, self.position[1] + 1]
+        top = [self.position[0], self.position[1] + 1]
+        topright = [self.position[0] + 1, self.position[1] + 1]
+        right = [self.position[0] + 1, self.position[1]]
+        bottomright = [self.position[0] + 1, self.position[1] - 1]
+        bottom = [self.position[0], self.position[1] - 1]
+        bottomleft = [self.position[0] - 1, self.position[1] - 1]
+        neighborpositions = [left, topleft, top, topright, right, bottomright, bottom, bottomleft]
+
+        for node in graph.nodes:
+            for position in neighborpositions:
+                if node.position[0] == position[0] and node.position[1] == position[1]:
+                    neighbors.append(node)
+                    node.visual.changecolor(YELLOW)
+        return neighbors
+
+    def calcgscore(self, node):
+        if self.parent is None:
+            if node.position[0] == self.position[0] or node.position[1] == self.position[1]:
+                node.gscore = 10
+            else:
+                node.gscore = 14
+            self.parent = node
+        else:
+            tempgscore = self.gscore
+            if node.position[0] == self.position[0] or node.position[1] == self.position[1]:
+                tempgscore = 10
+            else:
+                tempgscore = 14
+            if tempgscore < self.gscore:
+                self.parent = node
+        self.visual.drawtonode(self.parent)
 
 class NodeInformation(object):
     def __init__(self, position):
