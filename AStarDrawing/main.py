@@ -1,13 +1,11 @@
-
 '''main'''
 import sys
 import pygame
 from Grid import AStar
 from Grid import Graph
 from Node import NodeInformation
+from Game import GameLoop
 
-
-pygame.init()
 
 GRID = Graph(53, 25)
 
@@ -19,21 +17,16 @@ INFO = NodeInformation([0, 750])
 
 pygame.event.get()
 
+GAMELOOP = GameLoop()
 
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-
+while GAMELOOP.update():
     GRID.drawgraph()
 
-    ALGORITHM.enviormentupdate()
+    ALGORITHM.enviormentupdate(GAMELOOP.deltatime)
     ALGORITHM.algorithmstep()
 
     if ALGORITHM.current != None:
         INFO.drawinformation(ALGORITHM.current)
 
-    pygame.display.flip()
-    pygame.display.flip()
 
 

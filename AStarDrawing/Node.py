@@ -143,6 +143,16 @@ class Node(object):
                 self.parent = node
         self.visual.drawtonode(self.parent)
 
+    def calchscore(self, goal):
+        '''Calculates the value of the hscore which is the distance from the current node
+        to the node passed in which should be the goal node'''
+        self.hscore = 10 * (abs(goal.position[0] - self.position[0]) +
+                            abs(goal.position[1] - self.position[1]))
+
+    def calcfscore(self):
+        '''Calculates the value of the fscore which is the sum of the gscore and hscores value'''
+        self.fscore = self.gscore + self.hscore
+
 class NodeInformation(object):
     '''Creates text to display to the window with a nodes gscore, hscore, and fscore'''
     def __init__(self, position):
