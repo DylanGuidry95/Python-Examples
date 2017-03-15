@@ -27,7 +27,61 @@ class GameLoop(object):
         timer = pygame.time.get_ticks()
         self.deltatime = (timer - self.lasttick)
         self.lasttick = timer
-    
+
 class AStarInteraction(object):
+    '''Handles all of the user interaction with the astar algorithm'''
     def __init__(self, algorithm):
         self.algorithm = algorithm
+        self.states = {}
+        self.buttons = {}
+        self.timers = {}
+
+    def addbuttoncontrol(self, buttonname, state):
+        if not self.buttons.has_key(buttonname):
+            self.buttons[buttonname] = state
+
+    def addalgorithmstate(self,statename, state):
+        if not self.states[statename, state]:
+            self.states[statename] = state
+
+    def update(self, deltatime):
+        userinput = self.getbuttonpressed()
+        clickednode = self.getnodeclicked()
+        if userinput == "ToggleInfoMode":
+            self.infomode(clickednode)
+        if clickednode != None:
+            if self.states["infomode"]:
+                self.algorithm.nodeinfo.drawinformation(clickednode)
+
+    def infomode(self, node):
+        self.states["InfoMode"] = not self.states["InfoMode"]
+        if self.buttons["InfoMode"]:
+            self.algorithm.nodeinfo.drawinformation(node)
+
+    def changeenviorment(self, node, action):
+        if not self.buttons["InfoMode"]:
+            if action == "SetStart":
+                a = 0
+
+    def getbuttonpressed(self):
+        keys = pygame.key.get_pressed()
+        buttons = pygame.mouse.get_pressed()
+        if keys[pygame.K_i]:
+            self.buttons["I"] = True
+            return "ToggleInfoMode"
+        elif buttons[0]:
+            self.buttons["LeftMouse"] = True
+            return "SetStart"
+        elif buttons[1]:
+            self.buttons["MiddleMouse"] = True
+            return "SetWall"
+        elif buttons[2]:
+            self.buttons["RightMouse"] = True
+            return "SetGoal"
+
+    def getnodeclicked(self):
+        for node in self.algorithm.graph.nodes:
+            mxpos, mypos = pygame.mouse.get_pos()
+            if node.visual.collisioncheck([mxpos, mypos]):
+                return node
+        return None
