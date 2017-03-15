@@ -30,7 +30,8 @@ class GameLoop(object):
 
 class AStarInteraction(object):
     '''Handles all of the user interaction with the astar algorithm'''
-    def __init__(self, algorithm):
+    def __init__(self, algorithm, gameloop):
+        self.gameloop = gameloop
         self.algorithm = algorithm
         self.states = {}
         self.buttons = {}
@@ -39,6 +40,7 @@ class AStarInteraction(object):
     def addbuttoncontrol(self, buttonname, state):
         if not self.buttons.has_key(buttonname):
             self.buttons[buttonname] = state
+            self.timers[buttonname] = 0.0
 
     def addalgorithmstate(self,statename, state):
         if not self.states[statename, state]:
@@ -52,6 +54,15 @@ class AStarInteraction(object):
         if clickednode != None:
             if self.states["infomode"]:
                 self.algorithm.nodeinfo.drawinformation(clickednode)
+
+    def buttonpressdelay(self):
+        for iterator in range(0, len(self.buttons)):
+            if self.buttons[iterator]:
+                self.timers[iterator] = self.timers[iterator] + self.gameloop.deltatime
+                if self.timers[iterator] > 400:
+                    self.timers[iterator] = 0
+                    self.buttons[iterator] = False
+
 
     def infomode(self, node):
         self.states["InfoMode"] = not self.states["InfoMode"]
