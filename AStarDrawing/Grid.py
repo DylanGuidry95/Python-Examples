@@ -63,39 +63,8 @@ class AStar(object):
             if graphnode.isgoal and graphnode != self.goal:
                 graphnode.changestate("default")
 
-    def enviormentupdate(self, deltatime):
+    def enviormentupdate(self):
         '''Updates the visuals on screen'''
-        if pygame.key.get_pressed()[pygame.K_i] != 0:
-            self.infomode = not self.infomode
-            print self.infomode
-
-        for node in self.graph.nodes:
-            mxpos, mypos = pygame.mouse.get_pos()
-            if node.visual.collisioncheck([mxpos, mypos]):
-                if self.infomode:
-                    if pygame.mouse.get_pressed()[0]:
-                        self.nodeinfo.drawinformation(node)
-                else:
-                    if pygame.mouse.get_pressed()[0]:
-                        if not self.wasbuttonclicked[0]:
-                            self.setstartnode(node)
-                            self.wasbuttonclicked[0] = True
-                    if pygame.mouse.get_pressed()[1]:
-                        if not self.wasbuttonclicked[1]:
-                            self.modifywall(node)
-                            self.wasbuttonclicked[1] = True
-                    if pygame.mouse.get_pressed()[2]:
-                        if not self.wasbuttonclicked[2]:
-                            self.setgoalnode(node)
-                            self.wasbuttonclicked[2] = True
-
-        for iterator in range(0, 3):
-            if self.wasbuttonclicked[iterator]:
-                self.timers[iterator] = self.timers[iterator] + deltatime
-                if self.timers[iterator] > 400:
-                    self.timers[iterator] = 0
-                    self.wasbuttonclicked[iterator] = False
-
         self.checknodes()
 
     def algorithmstep(self):

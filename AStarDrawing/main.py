@@ -5,7 +5,7 @@ from Grid import AStar
 from Grid import Graph
 from Node import NodeInformation
 from Game import GameLoop
-
+from Game import AStarInteraction
 
 GRID = Graph(53, 25)
 
@@ -19,11 +19,17 @@ pygame.event.get()
 
 GAMELOOP = GameLoop()
 
-while GAMELOOP.update():
-    GRID.drawgraph()
+INTERACTION = AStarInteraction(ALGORITHM, GAMELOOP)
+INTERACTION.addalgorithmstate("InfoMode", False)
+INTERACTION.addalgorithmstate("UserStep", False)
+INTERACTION.addbuttoncontrol("I", False)
+INTERACTION.addbuttoncontrol("LeftMouse", False)
+INTERACTION.addbuttoncontrol("MiddleMouse", False)
+INTERACTION.addbuttoncontrol("RightMouse", False)
 
-    ALGORITHM.enviormentupdate(GAMELOOP.deltatime)
-    ALGORITHM.algorithmstep()
+while GAMELOOP.update():    
+    INTERACTION.algorithm.graph.drawgraph()
+    INTERACTION.update(GAMELOOP.deltatime)
 
     if ALGORITHM.current != None:
         INFO.drawinformation(ALGORITHM.current)

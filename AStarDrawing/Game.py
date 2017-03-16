@@ -11,7 +11,7 @@ class GameLoop(object):
 
     def update(self):
         '''Handles the execution of the application'''
-        self.deltatime()
+        self.calcdeltatime()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -43,8 +43,7 @@ class AStarInteraction(object):
             self.timers[buttonname] = 0.0
 
     def addalgorithmstate(self,statename, state):
-        if not self.states[statename, state]:
-            self.states[statename] = state
+        self.states[statename] = state
 
     def update(self, deltatime):
         userinput = self.getbuttonpressed()
@@ -52,8 +51,9 @@ class AStarInteraction(object):
         if userinput == "ToggleInfoMode":
             self.infomode(clickednode)
         if clickednode != None:
-            if self.states["infomode"]:
-                self.algorithm.nodeinfo.drawinformation(clickednode)
+            self.infomode(clickednode)
+            self.changeenviorment(clickednode, userinput)
+
 
     def buttonpressdelay(self):
         for iterator in range(0, len(self.buttons)):
@@ -65,14 +65,21 @@ class AStarInteraction(object):
 
 
     def infomode(self, node):
-        self.states["InfoMode"] = not self.states["InfoMode"]
+        state = self.states.get("InfoMode", None)
+        if state != None:
+            self.states["InfoMode"] = not self.states["InfoMode"]
         if self.buttons["InfoMode"]:
             self.algorithm.nodeinfo.drawinformation(node)
 
     def changeenviorment(self, node, action):
         if not self.buttons["InfoMode"]:
             if action == "SetStart":
-                a = 0
+                self.algorithm.setstartnode(node)
+            elif action == "SetWall":
+                self.algorithm.modifywall(node)
+            elif action == "SetGoal":
+                self.algorithm.setgoalnode(node)
+
 
     def getbuttonpressed(self):
         keys = pygame.key.get_pressed()
