@@ -160,12 +160,13 @@ class NodeInformation(object):
 
     def drawinformation(self, node):
         '''Updates the text element with the information of the node passed in'''
-        gposition = self.position
-        hposition = [self.position[0], self.position[1] + 50]
-        fposition = [self.position[0], self.position[1] + 100]
-        gtext = Text(SCREEN, gposition, [WHITE, BLACK], "G Score: " + str(node.gscore), 25)
-        htext = Text(SCREEN, hposition, [WHITE, BLACK], "H Score:" + str(node.hscore), 25)
-        ftext = Text(SCREEN, fposition, [WHITE, BLACK], "F Score:" + str(node.fscore), 25)
-        gtext.draw()
-        htext.draw()
-        ftext.draw()
+        if(node != None):
+            gposition = self.position
+            hposition = [self.position[0], self.position[1] + 50]
+            fposition = [self.position[0], self.position[1] + 100]
+            gtext = Text(SCREEN, gposition, [WHITE, BLACK], "G Score: " + str(node.gscore), 25)
+            htext = Text(SCREEN, hposition, [WHITE, BLACK], "H Score:" + str(node.hscore), 25)
+            ftext = Text(SCREEN, fposition, [WHITE, BLACK], "F Score:" + str(node.fscore), 25)
+            gtext.draw()
+            htext.draw()
+            ftext.draw()

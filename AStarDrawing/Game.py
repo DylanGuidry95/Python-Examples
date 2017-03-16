@@ -68,11 +68,12 @@ class AStarInteraction(object):
         state = self.states.get("InfoMode", None)
         if state != None:
             self.states["InfoMode"] = not self.states["InfoMode"]
-        if self.buttons["InfoMode"]:
+        if state:
             self.algorithm.nodeinfo.drawinformation(node)
 
     def changeenviorment(self, node, action):
-        if not self.buttons["InfoMode"]:
+        state = self.states.get("InfoMode", None)
+        if not state:
             if action == "SetStart":
                 self.algorithm.setstartnode(node)
             elif action == "SetWall":
