@@ -51,7 +51,6 @@ class AStarInteraction(object):
         if userinput == "ToggleInfoMode":
             self.infomode(clickednode)
         if clickednode != None:
-            self.infomode(clickednode)
             self.changeenviorment(clickednode, userinput)
 
 
@@ -68,6 +67,7 @@ class AStarInteraction(object):
         state = self.states.get("InfoMode", None)
         if state != None:
             self.states["InfoMode"] = not self.states["InfoMode"]
+            state = self.states.get("InfoMode", None)
         if state:
             self.algorithm.nodeinfo.drawinformation(node)
 
