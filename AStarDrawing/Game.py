@@ -1,3 +1,4 @@
+#pylint: disable=E1101
 '''Modules that control the main game loop'''
 import sys
 import pygame
@@ -38,14 +39,17 @@ class AStarInteraction(object):
         self.timers = {}
 
     def addbuttoncontrol(self, buttonname, state):
+        '''Defines new controls for the user'''
         if not self.buttons.has_key(buttonname):
             self.buttons[buttonname] = state
             self.timers[buttonname] = 0.0
 
-    def addalgorithmstate(self,statename, state):
+    def addalgorithmstate(self, statename, state):
+        '''Defines new states for the aplpication to be in'''
         self.states[statename] = state
 
-    def update(self, deltatime):
+    def update(self):
+        '''called every tick'''
         userinput = self.getbuttonpressed()
         clickednode = self.getnodeclicked()
         if userinput == "ToggleInfoMode":
@@ -55,6 +59,7 @@ class AStarInteraction(object):
 
 
     def buttonpressdelay(self):
+        '''Delays the time betwen key input checks by the system'''
         for iterator in range(0, len(self.buttons)):
             if self.buttons[iterator]:
                 self.timers[iterator] = self.timers[iterator] + self.gameloop.deltatime
@@ -64,6 +69,8 @@ class AStarInteraction(object):
 
 
     def infomode(self, node):
+        '''Disables the ability to modify the area but gives certain inforamtion about
+        the node that was clicked'''
         state = self.states.get("InfoMode", None)
         if state != None:
             self.states["InfoMode"] = not self.states["InfoMode"]
@@ -72,6 +79,8 @@ class AStarInteraction(object):
             self.algorithm.nodeinfo.drawinformation(node)
 
     def changeenviorment(self, node, action):
+        '''Modifies the play area by allowing the user to set start node, goal node, and
+        walls'''
         state = self.states.get("InfoMode", None)
         if not state:
             if action == "SetStart":
@@ -83,6 +92,8 @@ class AStarInteraction(object):
 
 
     def getbuttonpressed(self):
+        '''Checks to see what button pressed and returns a string value to represent
+        the control that user used'''
         keys = pygame.key.get_pressed()
         buttons = pygame.mouse.get_pressed()
         if keys[pygame.K_i]:
@@ -99,6 +110,7 @@ class AStarInteraction(object):
             return "SetGoal"
 
     def getnodeclicked(self):
+        '''If the mouse cursur is at the same positon as node returns that node'''
         for node in self.algorithm.graph.nodes:
             mxpos, mypos = pygame.mouse.get_pos()
             if node.visual.collisioncheck([mxpos, mypos]):
