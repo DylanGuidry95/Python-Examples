@@ -160,7 +160,7 @@ class NodeInformation(object):
 
     def drawinformation(self, node):
         '''Updates the text element with the information of the node passed in'''
-        if(node != None):
+        if node != None:
             gposition = self.position
             hposition = [self.position[0], self.position[1] + 50]
             fposition = [self.position[0], self.position[1] + 100]

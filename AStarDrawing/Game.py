@@ -1,10 +1,12 @@
-#pylint: disable=E1101
 '''Modules that control the main game loop'''
+#pylint: disable=E1101
 import sys
 import pygame
 
+
 class GameLoop(object):
     '''Controls the game loop and calcualtes delta time for the application'''
+
     def __init__(self):
         self.deltatime = 0.0
         self.lasttick = 0.0
@@ -29,8 +31,10 @@ class GameLoop(object):
         self.deltatime = (timer - self.lasttick)
         self.lasttick = timer
 
+
 class AStarInteraction(object):
     '''Handles all of the user interaction with the astar algorithm'''
+
     def __init__(self, algorithm, gameloop):
         self.gameloop = gameloop
         self.algorithm = algorithm
@@ -57,16 +61,15 @@ class AStarInteraction(object):
         if clickednode != None:
             self.changeenviorment(clickednode, userinput)
 
-
     def buttonpressdelay(self):
         '''Delays the time betwen key input checks by the system'''
         for iterator in range(0, len(self.buttons)):
             if self.buttons[iterator]:
-                self.timers[iterator] = self.timers[iterator] + self.gameloop.deltatime
+                self.timers[iterator] = self.timers[iterator] + \
+                    self.gameloop.deltatime
                 if self.timers[iterator] > 400:
                     self.timers[iterator] = 0
                     self.buttons[iterator] = False
-
 
     def infomode(self, node):
         '''Disables the ability to modify the area but gives certain inforamtion about
@@ -89,7 +92,6 @@ class AStarInteraction(object):
                 self.algorithm.modifywall(node)
             elif action == "SetGoal":
                 self.algorithm.setgoalnode(node)
-
 
     def getbuttonpressed(self):
         '''Checks to see what button pressed and returns a string value to represent

@@ -1,6 +1,4 @@
 '''All modules that modify the graph visualy and the information in it'''
-
-import pygame
 from Node import Node
 from Node import NodeInformation
 
@@ -31,9 +29,6 @@ class AStar(object):
         self.open = []
         self.close = []
         self.current = None
-        self.wasbuttonclicked = [False, False, False]
-        self.timers = [0.0, 0.0, 0.0]
-        self.infomode = False
         self.nodeinfo = NodeInformation([0, 750])
 
     def setstartnode(self, node):
