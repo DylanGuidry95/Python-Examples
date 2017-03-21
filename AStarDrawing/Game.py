@@ -54,6 +54,7 @@ class AStarInteraction(object):
 
     def update(self):
         '''called every tick'''
+        self.buttonpressdelay()
         userinput = self.getbuttonpressed()
         clickednode = self.getnodeclicked()
         if userinput == "ToggleInfoMode":
@@ -64,9 +65,8 @@ class AStarInteraction(object):
     def buttonpressdelay(self):
         '''Delays the time betwen key input checks by the system'''
         for iterator in range(0, len(self.buttons)):
-            if self.buttons[iterator]:
-                self.timers[iterator] = self.timers[iterator] + \
-                    self.gameloop.deltatime
+            if self.buttons.items()[iterator]:
+                self.timers[iterator] = self.timers[iterator] + self.gameloop.deltatime
                 if self.timers[iterator] > 400:
                     self.timers[iterator] = 0
                     self.buttons[iterator] = False
@@ -98,16 +98,16 @@ class AStarInteraction(object):
         the control that user used'''
         keys = pygame.key.get_pressed()
         buttons = pygame.mouse.get_pressed()
-        if keys[pygame.K_i]:
+        if keys[pygame.K_i] and not self.buttons["I"]:
             self.buttons["I"] = True
             return "ToggleInfoMode"
-        elif buttons[0]:
+        elif buttons[0] and not self.buttons["LeftMouse"]:
             self.buttons["LeftMouse"] = True
             return "SetStart"
-        elif buttons[1]:
+        elif buttons[1] and not self.buttons["MiddleMouse"]:
             self.buttons["MiddleMouse"] = True
             return "SetWall"
-        elif buttons[2]:
+        elif buttons[2] and not self.buttons["RightMouse"]:
             self.buttons["RightMouse"] = True
             return "SetGoal"
 

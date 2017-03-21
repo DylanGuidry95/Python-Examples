@@ -29,7 +29,7 @@ INTERACTION.addbuttoncontrol("RightMouse", False)
 
 while GAMELOOP.update():    
     INTERACTION.algorithm.graph.drawgraph()
-    INTERACTION.update(GAMELOOP.deltatime)
+    INTERACTION.update()
 
     if ALGORITHM.current != None:
         INFO.drawinformation(ALGORITHM.current)
