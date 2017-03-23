@@ -1,6 +1,8 @@
 '''Vector Math Utils classes'''
 import math
+import pygame
 from Utils import *
+from Game import GameLoop
 
 SIZE = WIDTH, HEIGHT = 1600, 900
 SCREEN = pygame.display.set_mode(SIZE)
@@ -17,7 +19,10 @@ class Vector2(object):
 
     def normalize(self):
         '''Returns a unit vector'''
-        return Vector2(self.xpos / self.maginitude(), self.ypos / self.maginitude())
+        if self.maginitude() == 0:
+            return Vector2(self.xpos / 1, self.ypos / 1)
+        else:
+            return Vector2(self.xpos / self.maginitude(), self.ypos / self.maginitude())
 
     def scale(self, scalar):
         '''Scales the value of the vector'''
@@ -33,6 +38,10 @@ class Vector2(object):
         '''Return a new vector with the difference between two vectors'''
         return Vector2(rhs.xpos - lhs.xpos, rhs.ypos - lhs.ypos)
 
+    @staticmethod
+    def equalto(rhs, lhs):
+        '''Compares two vectors to see if they are the same'''
+        return rhs.xpos == lhs.xpos and rhs.ypos == lhs.ypos
 
 class Agent(object):
     '''Moveable object'''
@@ -53,23 +62,17 @@ class Agent(object):
     def drawagent(self):
         '''Draws a visual to the screen at the objects position'''
         display = Rectangle(SCREEN, [self.position.xpos, self.position.ypos],
-                            WHITE, [10, 10], 10)
+                            WHITE, [50, 50], 10)
         display.draw()
 
     def settarget(self, position):
         '''Sets the value of the target position'''
         self.targetposition = position
 
-deltatime = 0.0
-lasttick = 0.0
 
-newAgent = Agent(Vector2(450,100))
 
-while not pygame.key.get_pressed()[pygame.K_i]:
-    timer = pygame.time.get_ticks()
-    deltatime = (timer - lasttick)
-    lasttick = timer
-
-    newAgent.update(deltatime)
-
+game = GameLoop()
+agent = Agent(Vector2(450,450))
+while game.update():
+    agent.drawagent()
 
