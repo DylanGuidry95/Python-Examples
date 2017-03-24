@@ -22,7 +22,6 @@ class GameLoop(object):
                 return False
 
         pygame.display.flip()
-        pygame.display.flip()
         return True
 
     def calcdeltatime(self):
