@@ -9,6 +9,11 @@ def screentoworld(position):
     screeny = ((position.ypos * -1)) + (SCREEN_HEIGHT / 2)
     return Vector2(screenx, screeny)
 
+def worldtoscreen(position):
+    worldx = (position.xpos * -1) + (SCREEN_WIDTH / 2)
+    worldy = ((position.ypos)) - (SCREEN_HEIGHT / 2)
+    return Vector2(worldx, worldy)
+
 class Shape(object):
     '''Base class to be used when drawing shapes'''
     def __init__(self, color):

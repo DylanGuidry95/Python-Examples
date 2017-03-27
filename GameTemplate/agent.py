@@ -1,10 +1,11 @@
 '''Agent'''
 import random
 import pygame
-from GameTemplate.gameobject import GameObject
-from GameTemplate.vector import Vector2
-from GameTemplate.shapes import Rectangle
-from GameTemplate.constants import *
+from gameobject import GameObject
+from vector import Vector2
+from shapes import Rectangle
+from shapes import worldtoscreen
+from constants import *
 
 
 class Agent(GameObject):
@@ -32,7 +33,9 @@ class Agent(GameObject):
         '''Seeking force to drive the agent toward a location'''
         mxpos, mypos = pygame.mouse.get_pos()
         self.target = Vector2(mxpos, mypos)
-        return Vector2.subtract(self.transform.globalposition, self.target).normalize()
+        self.target = worldtoscreen(self.target)
+        displacement = Vector2.subtract(self.transform.globalposition, self.target)
+        return displacement
 
     def update(self, deltatime):
         self.velocity = Vector2.add(self.velocity, self.boundaries())
