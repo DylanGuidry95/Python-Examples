@@ -5,8 +5,8 @@ from constants import *
 
 def screentoworld(position):
     '''Converts the vecotr passed in to a vector in screen space'''
-    screenx = position.xpos + (SCREEN_WIDTH / 2)
-    screeny = position.ypos + (SCREEN_HEIGHT / 2)
+    screenx = (position.xpos) + (SCREEN_WIDTH / 2)
+    screeny = ((position.ypos * -1)) + (SCREEN_HEIGHT / 2)
     return Vector2(screenx, screeny)
 
 class Shape(object):
@@ -26,22 +26,10 @@ class Rectangle(Shape):
 
     def draw(self, screen, position):
         '''Draws a rectangle to the screen based on the value set in the constructor'''
-        pos = screentoworld(position)
+        pos = screentoworld(position,)
         pygame.draw.rect(screen, self.color,
-                         (pos.xpos, pos.ypos,
+                         (pos.xpos - (self.scale.xpos / 2), pos.ypos - (self.scale.ypos / 2),
                           self.scale.xpos, self.scale.ypos))
-
-    def checkposition(self, position):
-        '''Checks to ensure the object is being drawn in screen space'''
-        pos = screentoworld(position)
-        if pos.xpos > SCREEN_WIDTH:
-            pos.xpos = SCREEN_WIDTH
-        if pos.ypos > SCREEN_HEIGHT:
-            pos.ypos = SCREEN_HEIGHT
-        if pos.xpos < 0:
-            pos.ypos = 0
-        if pos.ypos < 0:
-            pos.ypos = 0
 
 
 class Line(Shape):
@@ -55,4 +43,4 @@ class Line(Shape):
         startpos = screentoworld(position[0])
         endpos = screentoworld(position[1])
         pygame.draw.line(screen, self.color, (startpos.xpos, startpos.ypos),
-                         (endpos.xpos, startpos.ypos), self.width)
+                         (endpos.xpos, endpos.ypos), self.width)

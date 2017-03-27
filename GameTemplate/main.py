@@ -7,7 +7,7 @@ def main():
     '''main execution func'''
     game = TestGame("Test Game")
     bob = Agent("Bob")
-    bob.transform.globalposition = Vector2(200, -360)
+    bob.transform.globalposition = Vector2(0, 0)
     game.addnewobject(bob)
     # make gameobjects to participate in game
     game.run()
