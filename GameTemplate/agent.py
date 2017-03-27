@@ -7,6 +7,10 @@ from shapes import Rectangle
 from shapes import worldtoscreen
 from constants import *
 
+def clamp(num, minval, maxval):
+    if num > maxval:
+        num = maxval
+    return num
 
 class Agent(GameObject):
     def __init__(self, name):
@@ -35,12 +39,11 @@ class Agent(GameObject):
         self.target = Vector2(mxpos, mypos)
         self.target = worldtoscreen(self.target)
         displacement = Vector2.subtract(self.transform.globalposition, self.target)
-        return displacement
+        steer = displacement.multiplication(5)
+        return Vector2(steer.xpos - self.velocity.xpos, steer.ypos - self.velocity.ypos)
 
     def update(self, deltatime):
-        self.velocity = Vector2.add(self.velocity, self.boundaries())
         self.velocity = Vector2.add(self.velocity, self.seek())
-        if self.velocity > 10:
-            self.velocity = self.velocity.normalize()
+        print str(self.velocity.xpos) + "," + str(self.velocity.ypos)
         self.transform.globalposition = Vector2.add(self.transform.globalposition,
                                                     self.velocity)

@@ -2,7 +2,9 @@ from gametemplate import GameTemplate
 from constants import *
 import pygame
 from shapes import Line
+from shapes import Rectangle
 from vector import Vector2
+from shapes import worldtoscreen
 
 class TestGame(GameTemplate):
     def __init__(self, name):
@@ -28,6 +30,13 @@ class TestGame(GameTemplate):
         xaxis = Line(WHITE, 5)
         xaxis.draw(self.screen, [Vector2(-(SCREEN_WIDTH / 2), 0),
                                  Vector2(SCREEN_WIDTH / 2, 0)])
+        mxpos, mypos = pygame.mouse.get_pos()
+        mouse = Rectangle(WHITE, Vector2(25, 25))
+        mpos = worldtoscreen(Vector2(mxpos, mypos))
+        mpos = mpos.multiplication(-1)
+        mouse.draw(self.screen, mpos)
+
+
         for gameobject in self.gameobjects:
             gameobject.draw(self.screen)
     
