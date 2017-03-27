@@ -38,13 +38,12 @@ class Agent(GameObject):
         self.target = Vector2(mxpos, mypos)
         self.target = worldtoscreen(self.target)
         displacement = Vector2.subtract(self.transform.globalposition, self.target)
-        steer = displacement.multiplication(10).normalize()
-        return Vector2(steer.xpos - self.velocity.xpos, steer.ypos - self.velocity.ypos)
+        steer = Vector2.subtract(displacement, self.velocity)
+        return steer
 
     def update(self, deltatime):
         self.velocity = Vector2.add(self.velocity, self.seek())
-        if self.velocity.magnitude() > 5:
+        if self.velocity.magnitude() > 20:
             self.velocity = self.velocity.normalize()
-        print str(self.velocity.xpos) + "," + str(self.velocity.ypos)
         self.transform.globalposition = Vector2.add(self.transform.globalposition,
                                                     self.velocity)

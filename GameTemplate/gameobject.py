@@ -34,6 +34,9 @@ class GameObject(object):
     def update(self, deltatime):
         '''Updates the objects behaviors'''
 
+    def buttonevent(self, args):
+        '''if the gameobject responds to a UIButton click'''
+
     def draw(self, screen):
         '''Invokes the draw method from the renderer and draws it to the screen'''
         if self.renderer != None:
