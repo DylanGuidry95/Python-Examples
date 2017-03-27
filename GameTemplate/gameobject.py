@@ -1,6 +1,6 @@
 '''Base classes and components of a gameobject'''
+#pylint: disable=W0403
 from vector import Vector2
-from constants import *
 
 class Transform(object):
     '''Used to show the position and size of an object in screen space'''
@@ -38,4 +38,3 @@ class GameObject(object):
         '''Invokes the draw method from the renderer and draws it to the screen'''
         if self.renderer != None:
             self.renderer.draw(screen, self.transform.globalposition)
-

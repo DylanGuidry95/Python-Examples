@@ -1,18 +1,17 @@
 '''Agent'''
+#pylint: disable=W0403
 import random
 import pygame
 from gameobject import GameObject
 from vector import Vector2
 from shapes import Rectangle
 from shapes import worldtoscreen
-from constants import *
-
-def clamp(num, minval, maxval):
-    if num > maxval:
-        num = maxval
-    return num
+from constants import WHITE
+from constants import SCREEN_HEIGHT
+from constants import SCREEN_WIDTH
 
 class Agent(GameObject):
+    '''agent object'''
     def __init__(self, name):
         GameObject.__init__(self, name)
         self.renderer = Rectangle(WHITE,
@@ -39,11 +38,13 @@ class Agent(GameObject):
         self.target = Vector2(mxpos, mypos)
         self.target = worldtoscreen(self.target)
         displacement = Vector2.subtract(self.transform.globalposition, self.target)
-        steer = displacement.multiplication(5)
+        steer = displacement.multiplication(10).normalize()
         return Vector2(steer.xpos - self.velocity.xpos, steer.ypos - self.velocity.ypos)
 
     def update(self, deltatime):
         self.velocity = Vector2.add(self.velocity, self.seek())
+        if self.velocity.magnitude() > 5:
+            self.velocity = self.velocity.normalize()
         print str(self.velocity.xpos) + "," + str(self.velocity.ypos)
         self.transform.globalposition = Vector2.add(self.transform.globalposition,
                                                     self.velocity)

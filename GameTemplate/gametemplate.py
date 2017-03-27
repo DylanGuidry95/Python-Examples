@@ -1,10 +1,10 @@
 '''gametemplate.py'''
 #pylint: disable=E0401
 #pylint: disable=E1101
+#pylint: disable=W0403
 #from gameobject import GameObject
-import pygame
-from constants import *
 import sys
+import pygame
 
 class GameTemplate(object):
     '''pygame object'''
@@ -33,6 +33,3 @@ class GameTemplate(object):
 
     def _shutdown(self):
         '''shutdown the game properly'''
-
-
-    
