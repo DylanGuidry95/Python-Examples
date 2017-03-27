@@ -21,7 +21,7 @@ class TestGame(GameTemplate):
         return super(TestGame, self)._update()
 
     def draw(self):
-        self.screen.fill((0,0,0))
+        self.screen.fill((0, 0, 0))
         yaxis = Line(WHITE, 5)
         yaxis.draw(self.screen, [Vector2(0, -(SCREEN_HEIGHT / 2)),
                                  Vector2(0, (SCREEN_HEIGHT / 2))])
