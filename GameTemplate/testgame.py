@@ -16,9 +16,12 @@ class TestGame(GameTemplate):
             self.gameobjects.append(gameobject)
 
     def update(self):
+        for gameobject in self.gameobjects:
+            gameobject.update(self.deltatime)
         return super(TestGame, self)._update()
 
     def draw(self):
+        self.screen.fill((0,0,0))
         yaxis = Line(WHITE, 5)
         yaxis.draw(self.screen, [Vector2(0, -(SCREEN_HEIGHT / 2)),
                                  Vector2(0, (SCREEN_HEIGHT / 2))])

@@ -35,3 +35,8 @@ class Vector2(object):
     def equalto(rhs, lhs):
         '''Compares two vectors to see if they are the same'''
         return rhs.xpos == lhs.xpos and rhs.ypos == lhs.ypos
+
+    @staticmethod
+    def distance(rhs, lhs):
+        '''Gets the distance from one vector to another'''
+        return Vector2.subtract(rhs, lhs).magnitude()
