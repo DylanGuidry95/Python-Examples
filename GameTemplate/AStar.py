@@ -143,12 +143,13 @@ lines = file.readlines()
 index = 0
 for line in lines:
     if '#' in line:
+        index = index + 1
         continue
-    if 'S' in line:
+    elif 'S' in line:
         algo.setstart(graph.getnode(lines[index + 1].strip()))
-    if 'G' in line:        
+    elif 'G' in line:
         algo.setgoal(graph.getnode(lines[index + 1].strip()))
-    if 'W' in line:
+    elif 'W' in line:
         graph.getnode(lines[index + 1].strip()).iswalkable = False
     index = index + 1
 
