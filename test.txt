@@ -1,0 +1,20 @@
+#Key
+#G = Goal Node
+#S = Start Node
+#W = Non-walkable Node or Wall
+#This file will be read in line by line and if any of the key values are
+#found in the file the like below it will be the node we will modify the
+#algorithm enviorment based on the key that was above the values
+
+#need to add the ability to allow for more test cases per text file
+
+G
+47
+S
+43
+W
+35
+W
+45
+W
+55

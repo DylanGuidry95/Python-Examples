@@ -12,7 +12,7 @@ class Graph(object):
         nodecount = 0
         for row in range(0, self.width):
             for col in range(0, self.height):
-                self.nodes.append(Node(Vector2(col, row), nodecount))
+                self.nodes.append(Node(Vector2(col, row), str(nodecount)))
                 nodecount = nodecount + 1
 
     def getnode(self, nodeval):
@@ -138,11 +138,20 @@ class AStarAlgorithm(object):
 graph = Graph(10, 10)
 graph.gengraph()
 algo = AStarAlgorithm(graph)
-algo.setgoal(graph.getnode(47))
-algo.setstart(graph.getnode(43))
-graph.getnode(35).iswalkable = False
-graph.getnode(45).iswalkable = False
-graph.getnode(55).iswalkable = False
+file = open("test.txt")
+lines = file.readlines()
+index = 0
+for line in lines:
+    if '#' in line:
+        continue
+    if 'S' in line:
+        algo.setstart(graph.getnode(lines[index + 1].strip()))
+    if 'G' in line:        
+        algo.setgoal(graph.getnode(lines[index + 1].strip()))
+    if 'W' in line:
+        graph.getnode(lines[index + 1].strip()).iswalkable = False
+    index = index + 1
+
 
 bad = []
 for node in graph.nodes:
