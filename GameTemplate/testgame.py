@@ -41,9 +41,8 @@ class TestGame(GameTemplate):
         mxpos, mypos = pygame.mouse.get_pos()
         mouse = Rectangle(WHITE, Vector2(25, 25))
         mpos = worldtoscreen(Vector2(mxpos, mypos))
-        mpos = mpos.multiplication(-1)
+        mpos = mpos.scale(-1)
         mouse.draw(self.screen, mpos)
-
 
         for gameobject in self.gameobjects:
             gameobject.draw(self.screen)

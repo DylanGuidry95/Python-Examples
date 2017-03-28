@@ -9,6 +9,7 @@ def main():
     game = TestGame("Test Game")
     bob = Agent("Bob")
     bob.transform.globalposition = Vector2(10, 10)
+    bob.target = Vector2(300, 200)
     game.addnewobject(bob)
     # make gameobjects to participate in game
     game.run()

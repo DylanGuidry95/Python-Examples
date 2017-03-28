@@ -34,16 +34,13 @@ class Agent(GameObject):
 
     def seek(self):
         '''Seeking force to drive the agent toward a location'''
-        mxpos, mypos = pygame.mouse.get_pos()
-        self.target = Vector2(mxpos, mypos)
-        self.target = worldtoscreen(self.target)
-        displacement = Vector2.subtract(self.transform.globalposition, self.target)
-        steer = Vector2.subtract(displacement, self.velocity)
-        return steer
+        vecotor = (self.transform.globalposition - self.target).normalize().scale(5)
+        force = vecotor - self.velocity
+        return force
 
     def update(self, deltatime):
-        self.velocity = Vector2.add(self.velocity, self.seek())
-        if self.velocity.magnitude() > 20:
+        self.velocity = self.velocity + self.seek().scale(deltatime)
+        if self.velocity.magnitude() > 10:
             self.velocity = self.velocity.normalize()
-        self.transform.globalposition = Vector2.add(self.transform.globalposition,
-                                                    self.velocity)
+        self.transform.globalposition = (self.transform.globalposition
+                                         + self.velocity).scale(deltatime)

@@ -10,6 +10,7 @@ def screentoworld(position):
     return Vector2(screenx, screeny)
 
 def worldtoscreen(position):
+    '''Convertes the passed in to world space'''
     worldx = (position.xpos * -1) + (SCREEN_WIDTH / 2)
     worldy = ((position.ypos)) - (SCREEN_HEIGHT / 2)
     return Vector2(worldx, worldy)
@@ -31,7 +32,7 @@ class Rectangle(Shape):
 
     def draw(self, screen, position):
         '''Draws a rectangle to the screen based on the value set in the constructor'''
-        pos = screentoworld(position,)
+        pos = screentoworld(position)
         pygame.draw.rect(screen, self.color,
                          (pos.xpos - (self.scale.xpos / 2), pos.ypos - (self.scale.ypos / 2),
                           self.scale.xpos, self.scale.ypos))

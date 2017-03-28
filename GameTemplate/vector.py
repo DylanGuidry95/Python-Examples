@@ -2,6 +2,7 @@
 import math
 
 class Vector2(object):
+    '''Simple Vector 2D math class'''
     def __init__(self, xpos, ypos):
         self.xpos = xpos
         self.ypos = ypos
@@ -17,26 +18,27 @@ class Vector2(object):
         else:
             return Vector2(self.xpos / self.magnitude(), self.ypos / self.magnitude())
 
-    def multiplication(self, scalar):
+    def scale(self, scalar):
         '''Scales the value of the vector'''
         return Vector2(self.xpos * scalar, self.ypos * scalar)
 
-    @staticmethod
-    def add(rhs, lhs):
-        '''Return a new vecotr with the sum of the two vectors passed'''
-        return Vector2(rhs.xpos + lhs.xpos, rhs.ypos + lhs.ypos)
+    def __add__(self, rhs):
+        return Vector2(rhs.xpos + self.xpos, rhs.ypos + self.ypos)
 
-    @staticmethod
-    def subtract(rhs, lhs):
-        '''Return a new vector with the difference between two vectors'''
-        return Vector2(rhs.xpos - lhs.xpos, rhs.ypos - lhs.ypos)
+    def __sub__(self, rhs):
+        return Vector2(self.xpos - rhs.xpos, self.ypos - rhs.ypos)
 
-    @staticmethod
-    def equalto(rhs, lhs):
-        '''Compares two vectors to see if they are the same'''
-        return rhs.xpos == lhs.xpos and rhs.ypos == lhs.ypos
+    def __eq__(self, rhs):
+        return rhs.xpos == self.xpos and rhs.ypos == self.ypos
 
-    @staticmethod
-    def distance(rhs, lhs):
-        '''Gets the distance from one vector to another'''
-        return Vector2.subtract(rhs, lhs).magnitude()
+    def __ne__(self, rhs):
+        return rhs.xpos == self.xpos and rhs.ypos == self.ypos
+
+    def __truediv__(self, rhs):
+        return Vector2(self.xpos / rhs, self.ypos / rhs)
+
+    def __mul__(self, rhs):
+        return Vector2(self.xpos * rhs.xpos, self.ypos * rhs.ypos)
+
+    def __str__(self):
+        return "<" + str(self.xpos) + "," + str(self.ypos) + ">"
