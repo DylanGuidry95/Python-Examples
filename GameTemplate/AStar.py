@@ -1,7 +1,8 @@
-from gameobject import GameObject
+'''Astar.py'''
 from vector import Vector2
 
 class Graph(object):
+    '''Graph'''
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -16,12 +17,14 @@ class Graph(object):
                 nodecount = nodecount + 1
 
     def getnode(self, nodeval):
+        '''Checks to see if a node with the nodevalue passed in is in the graph'''
         for node in self.nodes:
             if node.value == nodeval:
                 return node
         return None
 
 class Node(object):
+    '''Node'''
     def __init__(self, position, value):
         self.gscore = 0
         self.hscore = 0
@@ -49,14 +52,14 @@ class Node(object):
                     neighbors.append(node)
         return neighbors
 
-    def calcgscore(self, node, isinlist):
+    def calcgscore(self, node, inlist):
         '''Calculates the gscore for the node based on the position of the node passed in'''
         tentativeg = 0
         if self.position.xpos == node.position.xpos or self.position.ypos == node.position.ypos:
             tentativeg = 10
         else:
             tentativeg = 14
-        if not isinlist:
+        if not inlist:
             self.gscore = node.gscore + tentativeg
             self.parent = node
         else:
@@ -75,6 +78,7 @@ class Node(object):
 
 
 class AStarAlgorithm(object):
+    '''Astar'''
     def __init__(self, graph):
         self.graph = graph
         self.begnode = None
@@ -92,15 +96,10 @@ class AStarAlgorithm(object):
         if self.graph.getnode(node.value):
             self.endnode = node
 
-    def sortopenlist(self):
-        for node in self.openlist:
-            for compare in self.openlist:
-                if node.fscore < compare.fscore:
-                    temp = node
-                    node = compare
-                    compare = temp
-
     def retrace(self):
+        '''Retraces the path from the goal node to the start node
+        by following the node parents and returns a list of all nodes
+        travered'''
         current = self.endnode
         path = []
         while current is not None:
@@ -109,6 +108,7 @@ class AStarAlgorithm(object):
         return path
 
     def algorithm(self):
+        '''AStar algorithm implementation'''
         if self.begnode is None or self.endnode is None:
             return "No Start or Goal set"
         current = self.begnode
