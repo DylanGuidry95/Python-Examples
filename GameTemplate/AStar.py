@@ -139,7 +139,7 @@ class AStarAlgorithm(object):
 
 
 def getcorrectpath(testcase):
-    '''Gets path from a text file'''
+    '''Gets the desierd result of the current test case from the string'''
     path = open("test.txt", "r")
     vectors = []
     for line in path:
@@ -157,7 +157,8 @@ def getcorrectpath(testcase):
     return vectors
 
 def setupastar(enviorment, algorithm):
-    '''Modifies the testing enviorment'''
+    '''Sets up the enviorment currently being tested based on the
+    contents of the string passed in by enviorment'''
     for iterator in range(0, len(enviorment)):
         if enviorment[iterator] == 'G':
             iterator = iterator + 2
@@ -181,8 +182,9 @@ def setupastar(enviorment, algorithm):
                 iterator = iterator + 1
             algorithm.graph.getnode(nodevalue).iswalkable = False
 
-def checkalgorithm():
-    '''Sets up graphs and tests them based on value found in a text file'''
+def setuptestcases():
+    '''Iterates through the the files designated for testing the functionality
+    of AStar. Invokes setupastar, testastar function, and getcorrectpath.'''
     enviorment = open("test.txt")
     lines = enviorment.readlines()
     answer = open("answer.txt", "w").close()
@@ -196,18 +198,17 @@ def checkalgorithm():
             graph = Graph(10, 10)
             algo = AStarAlgorithm(graph)
             setupastar(line, algo)
-            path = algo.algorithm()
-            correct = getcorrectpath("Test" + str(testnum))
             answer.write(line)
             answer.write("Test" + str(testnum) + "=path=")
-            testastar(path, correct, answer)
+            testastar(algo.algorithm(), "Test" + str(testnum), answer)
     answer.close()
 
-def testastar(userpath, correctpath, answerfile):
+def testastar(userpath, testid, answerfile):
     '''Userpath is the path returned by the astar algorithm
     Correctpath is a string representation of a correct path
     answerfile is the file we will write the path of the algorithm
     Test the value of astar'''
+    correctpath = getcorrectpath(testid)
     numcorrect = 0
     if userpath is not None:
         for node in range(0, len(userpath)):
@@ -218,5 +219,6 @@ def testastar(userpath, correctpath, answerfile):
     correctpercent = (float(numcorrect) / float(len(correctpath))) * 100
     answerfile.write("Correct:" + str(correctpercent))
     answerfile.write('\n')
+    answerfile.write('\n')
 
-checkalgorithm()
+setuptestcases()
