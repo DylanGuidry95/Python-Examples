@@ -212,7 +212,8 @@ def testastar(userpath, correctpath, answerfile):
     if userpath is not None:
         for node in range(0, len(userpath)):
             if str(userpath[node].position) == correctpath[node]:
-                answerfile.write(str(userpath[node].position))
+                numcorrect = numcorrect + 1
+            answerfile.write(str(userpath[node].position))
     answerfile.write('\n')
     correctpercent = (float(numcorrect) / float(len(correctpath))) * 100
     answerfile.write("Correct:" + str(correctpercent))
