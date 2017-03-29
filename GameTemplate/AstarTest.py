@@ -76,7 +76,7 @@ def setuptestcases():
             algo = AStarAlgorithm(Graph(10, 10)) #replace with astar object we are testing
             setupastar(line, algo)
             answer.write(line)
-            answer.write("Test" + str(testnum) + "=path=")
+            answer.write("Test" + str(testnum) + "=ReturnPath=")
             testastar(algo.algorithm(), "Test" + str(testnum), answer)
     answer.close()
 
@@ -94,6 +94,10 @@ def testastar(userpath, testid, answerfile):
             answerfile.write(str(userpath[node].position))
     answerfile.write('\n')
     correctpercent = (float(numcorrect) / float(len(correctpath))) * 100
+    answerfile.write(str(testid) + "=answer=")
+    for vector in correctpath:
+        answerfile.write(vector)
+    answerfile.write('\n')
     answerfile.write("Correct:" + str(correctpercent))
     answerfile.write('\n')
     answerfile.write('\n')
