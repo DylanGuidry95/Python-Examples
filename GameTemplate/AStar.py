@@ -154,30 +154,30 @@ def getcorrectpath(testcase):
                     vectors.append(value)
     return vectors
 
-def enviormentsetup(line, graph, algorithm):
+def setupastar(enviorment, algorithm):
     '''Modifies the testing enviorment'''
-    for iterator in range(0, len(line)):
-        if line[iterator] == 'G':
+    for iterator in range(0, len(enviorment)):
+        if enviorment[iterator] == 'G':
             iterator = iterator + 2
             nodevalue = ""
-            while line[iterator] != ';':
-                nodevalue = nodevalue + line[iterator]
+            while enviorment[iterator] != ';':
+                nodevalue = nodevalue + enviorment[iterator]
                 iterator = iterator + 1
-            algorithm.setgoal(graph.getnode(nodevalue))
-        if line[iterator] == 'S':
+            algorithm.setgoal(algorithm.graph.getnode(nodevalue))
+        if enviorment[iterator] == 'S':
             iterator = iterator + 2
             nodevalue = ""
-            while line[iterator] != ';':
-                nodevalue = nodevalue + line[iterator]
+            while enviorment[iterator] != ';':
+                nodevalue = nodevalue + enviorment[iterator]
                 iterator = iterator + 1
-            algorithm.setstart(graph.getnode(nodevalue))
-        if line[iterator] == 'W':
+            algorithm.setstart(algorithm.graph.getnode(nodevalue))
+        if enviorment[iterator] == 'W':
             iterator = iterator + 2
             nodevalue = ""
-            while line[iterator] != ';':
-                nodevalue = nodevalue + line[iterator]
+            while enviorment[iterator] != ';':
+                nodevalue = nodevalue + enviorment[iterator]
                 iterator = iterator + 1
-            graph.getnode(nodevalue).iswalkable = False
+            algorithm.graph.getnode(nodevalue).iswalkable = False
 
 def checkalgorithm():
     '''Sets up graphs and tests them based on value found in a text file'''
@@ -193,21 +193,28 @@ def checkalgorithm():
             testnum = testnum + 1
             graph = Graph(10, 10)
             algo = AStarAlgorithm(graph)
-            enviormentsetup(line, graph, algo)
-            answer.write(line)
-            answer.write("Test" + str(testnum) + "=path=")
+            setupastar(line, algo)
             path = algo.algorithm()
             correct = getcorrectpath("Test" + str(testnum))
-            numcorrect = 0
-            if path is not None:
-                for node in range(0, len(path)):
-                    if str(path[node].position) == correct[node]:
-                        numcorrect = numcorrect + 1
-                    answer.write(str(path[node].position))
-            answer.write('\n')
-            correctpercent = (float(numcorrect) / float(len(correct))) * 100
-            answer.write("Correct:" + str(correctpercent))
-            answer.write('\n')
+            answer.write(line)
+            answer.write("Test" + str(testnum) + "=path=")
+            testastar(path, correct, answer)
     answer.close()
+
+def testastar(userpath, correctpath, answerfile):
+    '''Userpath is the path returned by the astar algorithm
+    Correctpath is a string representation of a correct path
+    answerfile is the file we will write the path of the algorithm
+    Test the value of astar'''
+    numcorrect = 0
+    if userpath is not None:
+        for node in range(0, len(userpath)):
+            if str(userpath[node].position) == correctpath[node]:
+                numcorrect = numcorrect + 1
+            answerfile.write(str(userpath[node].position))
+    answerfile.write('\n')
+    correctpercent = (float(numcorrect) / float(len(correctpath))) * 100
+    answerfile.write("Correct:" + str(correctpercent))
+    answerfile.write('\n')
 
 checkalgorithm()
