@@ -137,6 +137,7 @@ class AStarAlgorithm(object):
 
 
 def getcorrectpath(testcase):
+    '''Gets path from a text file'''
     path = open("test.txt", "r")
     vectors = []
     for line in path:
@@ -153,57 +154,60 @@ def getcorrectpath(testcase):
                     vectors.append(value)
     return vectors
 
-graph = Graph(10, 10)
-graph.gengraph()
-algo = AStarAlgorithm(graph)
-file = open("test.txt")
-lines = file.readlines()
-answer = open("answer.txt", "w").close()
-lineiter = 0
-testnum = 0
-for line in lines:
-    if "#" in line:
-        continue
-    if "==>" in line:
-        testnum = testnum + 1
-        graph = Graph(10, 10)
-        algo = AStarAlgorithm(graph)
-        for iterator in range(0, len(line)):
-            if line[iterator] == 'G':
-                iterator = iterator + 2
-                nodevalue = ""
-                while line[iterator] != ';':
-                    nodevalue = nodevalue + line[iterator]
-                    iterator = iterator + 1
-                algo.setgoal(graph.getnode(nodevalue))
-            if line[iterator] == 'S':
-                iterator = iterator + 2
-                nodevalue = ""
-                while line[iterator] != ';':
-                    nodevalue = nodevalue + line[iterator]
-                    iterator = iterator + 1
-                algo.setstart(graph.getnode(nodevalue))
-            if line[iterator] == 'W':
-                iterator = iterator + 2
-                nodevalue = ""
-                while line[iterator] != ';':
-                    nodevalue = nodevalue + line[iterator]
-                    iterator = iterator + 1
-                graph.getnode(nodevalue).iswalkable = False
-        answer = open("answer.txt", "a")
-        answer.write(line)
-        answer.write("=path=")
-        path = algo.algorithm()
-        correct = getcorrectpath("Test" + str(testnum))
-        numcorrect = 0
-        if path is not None:
-            for node in range(0, len(path)):
-                if str(path[node].position) == correct[node]:
-                    numcorrect = numcorrect + 1
-                answer.write(str(path[node].position))
-        answer.write('\n')
-        correctpercent = (float(numcorrect) / float(len(correct))) * 100
-        answer.write("Correct:" + str(correctpercent))
-        answer.write('\n')
-        answer.close()
-    lineiter = lineiter + 1
+def enviormentsetup(line, graph, algorithm):
+    '''Modifies the testing enviorment'''
+    for iterator in range(0, len(line)):
+        if line[iterator] == 'G':
+            iterator = iterator + 2
+            nodevalue = ""
+            while line[iterator] != ';':
+                nodevalue = nodevalue + line[iterator]
+                iterator = iterator + 1
+            algorithm.setgoal(graph.getnode(nodevalue))
+        if line[iterator] == 'S':
+            iterator = iterator + 2
+            nodevalue = ""
+            while line[iterator] != ';':
+                nodevalue = nodevalue + line[iterator]
+                iterator = iterator + 1
+            algorithm.setstart(graph.getnode(nodevalue))
+        if line[iterator] == 'W':
+            iterator = iterator + 2
+            nodevalue = ""
+            while line[iterator] != ';':
+                nodevalue = nodevalue + line[iterator]
+                iterator = iterator + 1
+            graph.getnode(nodevalue).iswalkable = False
+
+def checkalgorithm():
+    '''Sets up graphs and tests them based on value found in a text file'''
+    enviorment = open("test.txt")
+    lines = enviorment.readlines()
+    answer = open("answer.txt", "w").close()
+    testnum = 0
+    answer = open("answer.txt", "a")
+    for line in lines:
+        if "#" in line:
+            continue
+        if "==>" in line:
+            testnum = testnum + 1
+            graph = Graph(10, 10)
+            algo = AStarAlgorithm(graph)
+            enviormentsetup(line, graph, algo)
+            answer.write(line)
+            answer.write("Test" + str(testnum) + "=path=")
+            path = algo.algorithm()
+            correct = getcorrectpath("Test" + str(testnum))
+            numcorrect = 0
+            if path is not None:
+                for node in range(0, len(path)):
+                    if str(path[node].position) == correct[node]:
+                        numcorrect = numcorrect + 1
+                    answer.write(str(path[node].position))
+            answer.write('\n')
+            correctpercent = (float(numcorrect) / float(len(correct))) * 100
+            answer.write("Correct:" + str(correctpercent))
+            answer.write('\n')
+    answer.close()
+
+checkalgorithm()
