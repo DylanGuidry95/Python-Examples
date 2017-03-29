@@ -115,6 +115,8 @@ class AStarAlgorithm(object):
         current = self.begnode
         self.openlist.append(current)
         while len(self.openlist) > 0:
+            if self.begnode == self.endnode:
+                return [self.begnode]
             self.openlist.remove(current)
             self.closelist.append(current)
             neighbors = current.getneighbors(self.graph)
@@ -210,8 +212,7 @@ def testastar(userpath, correctpath, answerfile):
     if userpath is not None:
         for node in range(0, len(userpath)):
             if str(userpath[node].position) == correctpath[node]:
-                numcorrect = numcorrect + 1
-            answerfile.write(str(userpath[node].position))
+                answerfile.write(str(userpath[node].position))
     answerfile.write('\n')
     correctpercent = (float(numcorrect) / float(len(correctpath))) * 100
     answerfile.write("Correct:" + str(correctpercent))
