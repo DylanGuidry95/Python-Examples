@@ -34,7 +34,7 @@ class Vector2(object):
     def __ne__(self, rhs):
         return rhs.xpos == self.xpos and rhs.ypos == self.ypos
 
-    def __truediv__(self, rhs):
+    def __div__(self, rhs):
         return Vector2(self.xpos / rhs, self.ypos / rhs)
 
     def __mul__(self, rhs):
