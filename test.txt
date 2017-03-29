@@ -8,7 +8,8 @@
 #need to add the ability to allow for more test cases per text file
 
 ==>G:47;S:43;W:35;W:45;W:55;
-
+Test1=answer=<7,4><6,3><5,2><4,3><4,4><3,4>
 
 ==>G:99;S:0;
+Test2=answer=<9,9><8,8><7,7><6,6><5,5><4,4><3,3><2,2><1,1><0,0>
 

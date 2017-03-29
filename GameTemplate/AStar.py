@@ -136,16 +136,36 @@ class AStarAlgorithm(object):
         return None
 
 
+def getcorrectpath(testcase):
+    path = open("test.txt", "r")
+    vectors = []
+    for line in path:
+        if "#" in line:
+            continue
+        if testcase + "=answer=" in line:
+            for i in range(0, len(line)):
+                value = ""
+                if line[i] == '<':
+                    while line[i] != '>':
+                        value = value + line[i]
+                        i = i + 1
+                    value = value + line[i]
+                    vectors.append(value)
+    return vectors
+
 graph = Graph(10, 10)
 graph.gengraph()
 algo = AStarAlgorithm(graph)
 file = open("test.txt")
 lines = file.readlines()
 answer = open("answer.txt", "w").close()
+lineiter = 0
+testnum = 0
 for line in lines:
     if "#" in line:
         continue
     if "==>" in line:
+        testnum = testnum + 1
         graph = Graph(10, 10)
         algo = AStarAlgorithm(graph)
         for iterator in range(0, len(line)):
@@ -172,10 +192,18 @@ for line in lines:
                 graph.getnode(nodevalue).iswalkable = False
         answer = open("answer.txt", "a")
         answer.write(line)
-        answer.write("=answer=")
+        answer.write("=path=")
         path = algo.algorithm()
+        correct = getcorrectpath("Test" + str(testnum))
+        numcorrect = 0
         if path is not None:
-            for node in path:
-                answer.write(str(node.position))
+            for node in range(0, len(path)):
+                if str(path[node].position) == correct[node]:
+                    numcorrect = numcorrect + 1
+                answer.write(str(path[node].position))
+        answer.write('\n')
+        correctpercent = (float(numcorrect) / float(len(correct))) * 100
+        answer.write("Correct:" + str(correctpercent))
         answer.write('\n')
         answer.close()
+    lineiter = lineiter + 1
