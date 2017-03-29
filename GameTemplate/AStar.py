@@ -7,6 +7,7 @@ class Graph(object):
         self.width = width
         self.height = height
         self.nodes = []
+        self.gengraph()
 
     def gengraph(self):
         '''generates the graph'''
@@ -110,7 +111,7 @@ class AStarAlgorithm(object):
     def algorithm(self):
         '''AStar algorithm implementation'''
         if self.begnode is None or self.endnode is None:
-            return "No Start or Goal set"
+            return None
         current = self.begnode
         self.openlist.append(current)
         while len(self.openlist) > 0:
@@ -140,26 +141,41 @@ graph.gengraph()
 algo = AStarAlgorithm(graph)
 file = open("test.txt")
 lines = file.readlines()
-index = 0
+answer = open("answer.txt", "w").close()
 for line in lines:
-    if '#' in line:
-        index = index + 1
+    if "#" in line:
         continue
-    elif 'S' in line:
-        algo.setstart(graph.getnode(lines[index + 1].strip()))
-    elif 'G' in line:
-        algo.setgoal(graph.getnode(lines[index + 1].strip()))
-    elif 'W' in line:
-        graph.getnode(lines[index + 1].strip()).iswalkable = False
-    index = index + 1
-
-
-bad = []
-for node in graph.nodes:
-    if not node.iswalkable:
-        bad.append(node)
-
-
-test = algo.algorithm()
-for node in test:
-    print node.position
+    if "==>" in line:
+        graph = Graph(10, 10)
+        algo = AStarAlgorithm(graph)
+        for iterator in range(0, len(line)):
+            if line[iterator] == 'G':
+                iterator = iterator + 2
+                nodevalue = ""
+                while line[iterator] != ';':
+                    nodevalue = nodevalue + line[iterator]
+                    iterator = iterator + 1
+                algo.setgoal(graph.getnode(nodevalue))
+            if line[iterator] == 'S':
+                iterator = iterator + 2
+                nodevalue = ""
+                while line[iterator] != ';':
+                    nodevalue = nodevalue + line[iterator]
+                    iterator = iterator + 1
+                algo.setstart(graph.getnode(nodevalue))
+            if line[iterator] == 'W':
+                iterator = iterator + 2
+                nodevalue = ""
+                while line[iterator] != ';':
+                    nodevalue = nodevalue + line[iterator]
+                    iterator = iterator + 1
+                graph.getnode(nodevalue).iswalkable = False
+        answer = open("answer.txt", "a")
+        answer.write(line)
+        answer.write("=answer=")
+        path = algo.algorithm()
+        if path is not None:
+            for node in path:
+                answer.write(str(node.position))
+        answer.write('\n')
+        answer.close()
