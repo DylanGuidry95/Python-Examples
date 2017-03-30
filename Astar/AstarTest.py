@@ -1,4 +1,4 @@
-#pylint score: 10/10
+#pylint rate: 10/10
 '''File that handles the testing of the astar algorithm'''
 from AStar import AStarAlgorithm
 from AStar import Graph

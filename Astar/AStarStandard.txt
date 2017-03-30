@@ -39,5 +39,3 @@ Other requirements:
 - The code must be written in the standard set forth by pylint.
 - Code must be ran against pylint and should have minimal to no 
 complaints with the code. 
-	- When code is ran against pylint paste the score at the top of
-	the file ran.
