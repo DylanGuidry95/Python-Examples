@@ -1,5 +1,4 @@
 '''File that handles the testing of the astar algorithm'''
-
 from AStar import AStarAlgorithm
 from AStar import Graph
 #Usage documentation
