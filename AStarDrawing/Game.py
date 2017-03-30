@@ -4,6 +4,7 @@ import sys
 import pygame
 
 
+
 class GameLoop(object):
     '''Controls the game loop and calcualtes delta time for the application'''
 
